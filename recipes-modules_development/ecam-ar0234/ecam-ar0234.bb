@@ -1,4 +1,4 @@
-SUMMARY = "Example of how to build an external Linux kernel module"
+SUMMARY = "ECAN ar0234 kernel module"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12f884d2ae1ff87c09e5b7ccc2c4ca7e"
 
@@ -14,8 +14,10 @@ SRC_URI = "file://Makefile \
 
 S = "${WORKDIR}"
 
-# The inherit of module.bbclass will automatically name module packages with
-# "kernel-module-" prefix as required by the oe-core build environment.
-
-#RPROVIDES_${PN} += "kernel-module-hello"
 RPROVIDES_${PN} += "kernel-module-ecam-ar0234"
+FILES_${PN} += "/etc/modules-load.d/ecam_ar0234.conf"
+
+do_install_append() {
+    install -d ${D}/etc/modules-load.d/
+    cat "ecam_ar0234" > ${D}/etc/modules-load.d/ecam_ar0234.conf
+}

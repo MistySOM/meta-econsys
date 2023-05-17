@@ -1,0 +1,115 @@
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
+
+/ {
+	clk_ext_camera: clk_ext_camera {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <24000000>;
+	};
+
+	econ_vdddo_1v8: 1p8v {
+		compatible = "regulator-fixed";
+		regulator-name = "camera_vdddo";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-always-on;
+	};
+
+	econ_vdda_2v8: 2p8v {
+		compatible = "regulator-fixed";
+		regulator-name = "camera_vdda";
+		regulator-min-microvolt = <2800000>;
+		regulator-max-microvolt = <2800000>;
+		regulator-always-on;
+	};
+
+	econ_vddd_1v5: 1p5v {
+		compatible = "regulator-fixed";
+		regulator-name = "camera_vddd";
+		regulator-min-microvolt = <1500000>;
+		regulator-max-microvolt = <1500000>;
+		regulator-always-on;
+	};
+};
+
+
+&i2c0 {
+	pinctrl-0 = <&i2c0_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+	clock-frequency = <400000>;
+
+	pca6408_20: pca6408@20 {
+		compatible = "ti,pca6408";
+		gpio-controller;
+		#gpio-cells = <2>;
+		reg = <0x20>;
+		status = "okay";
+	};
+
+	ar0234: camera@42 {
+		compatible = "ar0234";
+		reg = <0x42>;
+		clock-names = "xclk";
+		clocks = <&clk_ext_camera>;
+		clock-frequency = <24000000>;
+		//camera-mipi-clk = <1200>;
+		camera-mipi-clk = <800>;
+		camera-mipi-lanes = <4>;
+		vdddo-supply = <&econ_vdddo_1v8>;
+		vdda-supply = <&econ_vdda_2v8>;
+		vddd-supply = <&econ_vddd_1v5>;
+
+		reset-gpios = <&pca6408_20 1 GPIO_ACTIVE_HIGH>;
+		pwdn-gpios = <&pca6408_20 0 GPIO_ACTIVE_HIGH>;
+
+		port {
+			econ_to_csi: endpoint {
+				clock-lanes = <0>;
+				data-lanes = <1 2 3 4>;
+				remote-endpoint = <&csi2_in>;
+			};
+		};
+	};
+
+	imx462: camera@1f {
+		compatible = "imx462";
+		reg = <0x1f>;
+		clock-names = "xclk";
+		clocks = <&clk_ext_camera>;
+		clock-frequency = <24000000>;
+		//camera-mipi-clk = <1200>;
+		camera-mipi-clk = <800>;
+		camera-mipi-lanes = <4>;
+		vdddo-supply = <&econ_vdddo_1v8>;
+		vdda-supply = <&econ_vdda_2v8>;
+		vddd-supply = <&econ_vddd_1v5>;
+
+		reset-gpios = <&pca6408_20 1 GPIO_ACTIVE_HIGH>;
+		pwdn-gpios = <&pca6408_20 0 GPIO_ACTIVE_HIGH>;
+
+		port {
+			econ_to_csi: endpoint {
+				clock-lanes = <0>;
+				data-lanes = <1 2 3 4>;
+				remote-endpoint = <&csi2_in>;
+			};
+		};
+	};
+};
+
+
+&csi2 {
+	status = "okay";
+
+	ports {
+		port {
+			csi2_in: endpoint {
+				clock-lanes = <0>;
+				data-lanes = <1 2 3 4>;
+				remote-endpoint = <&econ_to_csi>;
+			};
+		};
+	};
+};
