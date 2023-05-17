@@ -65,7 +65,7 @@
 		pwdn-gpios = <&pca6408_20 0 GPIO_ACTIVE_HIGH>;
 
 		port {
-			econ_to_csi: endpoint {
+			ar0234_to_csi: endpoint {
 				clock-lanes = <0>;
 				data-lanes = <1 2 3 4>;
 				remote-endpoint = <&csi2_in>;
@@ -90,7 +90,7 @@
 		pwdn-gpios = <&pca6408_20 0 GPIO_ACTIVE_HIGH>;
 
 		port {
-			econ_to_csi: endpoint {
+			imx462_to_csi: endpoint {
 				clock-lanes = <0>;
 				data-lanes = <1 2 3 4>;
 				remote-endpoint = <&csi2_in>;
@@ -108,7 +108,7 @@
 			csi2_in: endpoint {
 				clock-lanes = <0>;
 				data-lanes = <1 2 3 4>;
-				remote-endpoint = <&econ_to_csi>;
+				remote-endpoint = <&ar0234_to_csi>;
 			};
 		};
 	};
