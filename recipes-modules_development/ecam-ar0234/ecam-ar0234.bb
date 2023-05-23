@@ -19,5 +19,5 @@ FILES_${PN} += "/etc/modules-load.d/ecam_ar0234.conf"
 
 do_install_append() {
     install -d ${D}/etc/modules-load.d/
-    cat "ecam_ar0234" > ${D}/etc/modules-load.d/ecam_ar0234.conf
+    echo "ecam_ar0234" > ${D}/etc/modules-load.d/ecam_ar0234.conf
 }

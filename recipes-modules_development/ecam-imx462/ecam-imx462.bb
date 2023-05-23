@@ -18,5 +18,5 @@ FILES_${PN} += "/etc/modules-load.d/ecam_imx462.conf"
 
 do_install_append() {
     install -d ${D}/etc/modules-load.d/
-    cat "ecam_imx462" > ${D}/etc/modules-load.d/ecam_imx462.conf
+    echo "ecam_imx462" > ${D}/etc/modules-load.d/ecam_imx462.conf
 }
