@@ -33,6 +33,7 @@
 	};
 };
 
+/delete-node/ &ov5645;
 
 &i2c0 {
 	pinctrl-0 = <&i2c0_pins>;
@@ -66,31 +67,6 @@
 
 		port {
 			ar0234_to_csi: endpoint {
-				clock-lanes = <0>;
-				data-lanes = <1 2 3 4>;
-				remote-endpoint = <&csi2_in>;
-			};
-		};
-	};
-
-	imx462: camera@1f {
-		compatible = "imx462";
-		reg = <0x1f>;
-		clock-names = "xclk";
-		clocks = <&clk_ext_camera>;
-		clock-frequency = <24000000>;
-		//camera-mipi-clk = <1200>;
-		camera-mipi-clk = <800>;
-		camera-mipi-lanes = <4>;
-		vdddo-supply = <&econ_vdddo_1v8>;
-		vdda-supply = <&econ_vdda_2v8>;
-		vddd-supply = <&econ_vddd_1v5>;
-
-		reset-gpios = <&pca6408_20 1 GPIO_ACTIVE_HIGH>;
-		pwdn-gpios = <&pca6408_20 0 GPIO_ACTIVE_HIGH>;
-
-		port {
-			imx462_to_csi: endpoint {
 				clock-lanes = <0>;
 				data-lanes = <1 2 3 4>;
 				remote-endpoint = <&csi2_in>;

@@ -3,7 +3,7 @@
 cru=$(cat /sys/class/video4linux/video*/name | grep "CRU")
 csi2=$(cat /sys/class/video4linux/v4l-subdev*/name | grep "csi2")
 
-# Available resolution of IMX462.
+# Available resolution of AR0234.
 # Please choose one of a following resolution then comment out the rest.
 
 econ_res=$1
@@ -16,7 +16,7 @@ econ_res=$1
 if [ -z "$1" ]
 then
 	echo "Available Resolutions :  1920x1080 , 1280x720 , 640x480"
-	echo " Usage Example: econ-enable.sh 1920x1080"
+	echo " Usage Example: econ-init.sh 1920x1080"
 	exit 1
 fi
 
@@ -31,9 +31,8 @@ else
 	else
 		media-ctl -d /dev/media0 -l "'rzg2l_csi2 10830400.csi2':1 -> 'CRU output':0 [1]"
 		media-ctl -d /dev/media0 -V "'rzg2l_csi2 10830400.csi2':1 [fmt:UYVY8_2X8/$econ_res field:none]"
-		media-ctl -d /dev/media0 -V "'imx462 0-001f':0 [fmt:UYVY8_2X8/$econ_res field:none]"
 		media-ctl -d /dev/media0 -V "'ar0234 0-0042':0 [fmt:UYVY8_2X8/$econ_res field:none]"
-		echo "Link CRU/CSI2 to ECON with format UYVY8_2X8 and resolution $econ_res"
+		echo "Link CRU/CSI2 to ECON ar0234 with format UYVY8_2X8 and resolution $econ_res"
 	fi
 fi
 
