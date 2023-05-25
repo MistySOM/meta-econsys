@@ -9,14 +9,21 @@ SRC_URI = "file://Makefile \
            file://common.h \
            file://imx462_firmware.txt \
            file://COPYING \
+           file://econ-init.sh \
           "
 
 S = "${WORKDIR}"
-
+CONFLICTS = "ecam-ar0234"
 RPROVIDES_${PN} += "kernel-module-ecam-imx462"
-FILES_${PN} += "/etc/modules-load.d/ecam_imx462.conf"
+
+FILES_${PN} += "/etc/modules-load.d/ecam_imx462.conf \
+                /home/root/econ-init.sh \
+               "
 
 do_install_append() {
     install -d ${D}/etc/modules-load.d/
     echo "ecam_imx462" > ${D}/etc/modules-load.d/ecam_imx462.conf
+
+    install -d ${D}/home/root/
+    install -m 0766 ${WORKDIR}/econ-init.sh ${D}/home/root/
 }
