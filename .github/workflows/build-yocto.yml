@@ -1,0 +1,47 @@
+name: Build Yocto Image
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master", "develop" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    
+jobs:
+  build-yocto:
+    runs-on: DC02
+    
+    steps:    
+    - uses: actions/checkout@v3
+      with:
+        repository: MistySOM/rzg2l
+        path: rzg2l
+        ref: develop
+        submodules: true
+
+    - uses: actions/checkout@v3
+      with:
+        path: meta-econsys
+
+    - run: |
+        rm -rf $GITHUB_WORKSPACE/rzg2l/Build/meta-econsys
+        cp -r $GITHUB_WORKSPACE/meta-econsys $GITHUB_WORKSPACE/rzg2l/Build/
+
+    - name: Build the Docker image
+      run: cd $GITHUB_WORKSPACE/rzg2l/Build && ./build.sh; 
+    
+    - name: Run the Docker image and build output files with SDK
+      run: cd $GITHUB_WORKSPACE/rzg2l/Build && ./run.sh -c /home/github/rzg2l-cache;
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: output-files
+        path: |
+          $GITHUB_WORKSPACE/rzg2l/Build/output/images/smarc-rzg2l/Image-smarc-rzg2l.bin
+          $GITHUB_WORKSPACE/rzg2l/Build/output/images/smarc-rzg2l/r9a07g044l2-smarc.dtb
+          $GITHUB_WORKSPACE/rzg2l/Build/output/images/smarc-rzg2l/r9a07g044l2-smarc-ar0234.dtb
+          $GITHUB_WORKSPACE/rzg2l/Build/output/images/smarc-rzg2l/r9a07g044l2-smarc-imx462.dtb
+          $GITHUB_WORKSPACE/rzg2l/Build/output/images/smarc-rzg2l/mistysom-image-smarc-rzg2l.tar.bz2
