@@ -10,19 +10,8 @@ SRC_URI = "file://Makefile \
            file://firmware.h \
            file://ecam25_cuxvr.txt \
            file://COPYING \
-           file://econ-ar0234-init.sh \
           "
 
 S = "${WORKDIR}"
-# CONFLICTS = "ecam-imx462"
 RPROVIDES_${PN} += "kernel-module-ecam-ar0234"
-
-FILES_${PN} += "/home/root/econ-ar0234-init.sh"
-
-do_install_append() {
-#     install -d ${D}/etc/modules-load.d/
-#     echo "ecam_ar0234" > ${D}/etc/modules-load.d/ecam_ar0234.conf
-
-    install -d ${D}/home/root/
-    install -m 0766 ${WORKDIR}/econ-ar0234-init.sh ${D}/home/root/
-}
+RDEPENDS_${PN} += "ecam-init"

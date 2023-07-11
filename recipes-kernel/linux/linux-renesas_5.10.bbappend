@@ -22,3 +22,8 @@ do_install_append() {
 	install -m 0644 ${DTB_FILE} ${D}/boot/${DT}-imx462.dtb
 	cp ${WORKDIR}/${DT}.dts.orig ${DTS_FILE}
 }
+
+do_deploy_append() {
+	install -m 0644 ${D}/boot/${DT}-ar0234.dtb $deployDir
+	install -m 0644 ${D}/boot/${DT}-imx462.dtb $deployDir
+}
